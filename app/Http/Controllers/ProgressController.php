@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\progress;
-use App\Http\Controllers\Controller;
+use App\Models\Progress;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ProgressCollection;
+use App\Http\Resources\ProgressResource;
+use App\Models\Progress as ModelsProgress;
 
 class ProgressController extends Controller
 {
@@ -13,7 +16,7 @@ class ProgressController extends Controller
      */
     public function index()
     {
-        //
+        return new ProgressCollection(Progress::all());
     }
 
     /**
@@ -35,15 +38,15 @@ class ProgressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(progress $progress)
+    public function show(Request $request, Progress $progress)
     {
-        //
+        return new ProgressResource($progress);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(progress $progress)
+    public function edit(Progress $progress)
     {
         //
     }
@@ -51,7 +54,7 @@ class ProgressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, progress $progress)
+    public function update(Request $request, Progress $progress)
     {
         //
     }
@@ -59,7 +62,7 @@ class ProgressController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(progress $progress)
+    public function destroy(Progress $progress)
     {
         //
     }
