@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProgressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('login',[AuthController::class, 'login']);
+Route::post('register',[AuthController::class, 'register']);
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('Progress',ProgressController::class)->only(['index' , 'show']);
+Route::middleware('auth:sanctum')->group(function(){
+
+    Route::apiResource('progress',ProgressController::class);
+});
