@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('weight');
+            $table->integer('weight');
+            $table->integer('height');
             $table->string('measurements');
             $table->string('performance');
-            $table->enum('status', ['Not_completed','completed']);
+            $table->boolean('status')->default(false);
+            $table->foreignId('user_id')->constrained('users');
             $table->rememberToken();
             $table->timestamps();
         });
