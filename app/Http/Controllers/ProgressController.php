@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Progress;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProgressCollection;
+use App\Http\Requests\StoreProgressRequest;
+use App\Http\Requests\UpdateProgressRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProgressResource;
-use App\Models\Progress as ModelsProgress;
+use App\Http\Resources\ProgressCollection;
 
 class ProgressController extends Controller
 {
@@ -16,54 +18,41 @@ class ProgressController extends Controller
      */
     public function index()
     {
-        return new ProgressCollection(Progress::all());
+
+
+        return new ProgressCollection(Progress::Paginate());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreProgressRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $progress = Auth::user()->Progress()->create($validated);
+
+        return new ProgressResource($progress);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request, Progress $progress)
     {
         return new ProgressResource($progress);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Progress $progress)
+    public function update(UpdateProgressRequest $request, Progress $progress)
     {
-        //
-    }
+        $validated = $request->validated();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Progress $progress)
-    {
-        //
+        $progress->update($validated);
+
+        return new ProgressResource($progress);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Progress $progress)
+    public function destroy(Request $request , Progress $progress)
     {
-        //
+        $progress->delete();
+
+        return response()->noContent();
     }
 }
